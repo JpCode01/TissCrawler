@@ -1,6 +1,5 @@
 plugins {
     id 'groovy'
-    id 'application'
 }
 
 group = 'com.jpcode'
@@ -21,12 +20,4 @@ dependencies {
 
 test {
     useJUnitPlatform()
-}
-
-application {
-    mainClass = 'com.jpcode.Main'
-}
-
-tasks.named('run') {
-    workingDir = project.projectDir
 }
