@@ -5,5 +5,5 @@ static void main(String[] args) {
 
     TissCrawler crawler = new TissCrawler()
 
-    crawler.acessar()
+    crawler.baixarComponente()
 }
