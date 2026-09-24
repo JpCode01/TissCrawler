@@ -1,5 +1,9 @@
 package com.jpcode
 
 static void main(String[] args) {
-    println "Hello world!"
+    println("TISS Crawler iniciado!")
+
+    TissCrawler crawler = new TissCrawler()
+
+    crawler.acessar()
 }
