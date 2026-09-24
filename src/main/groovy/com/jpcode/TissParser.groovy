@@ -32,4 +32,10 @@ class TissParser {
             link.text().contains("Componente de Comunicação")
         }
     }
+
+    Element encontrarLinkHistorico(Document document) {
+        return document.select('a').find { Element link ->
+            link.text().contains("Clique aqui para acessar todas as versões dos Componentes")
+        }
+    }
 }
