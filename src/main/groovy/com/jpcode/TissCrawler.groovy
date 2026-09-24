@@ -8,7 +8,7 @@ class TissCrawler {
 
     private final TissParser parser = new TissParser()
 
-    void baixarComponente() {
+    void iniciar() {
 
         println System.getProperty("user.dir")
 
@@ -35,6 +35,21 @@ class TissCrawler {
                 Document documentTiss = HttpBuilder.configure {
                     request.uri = urlTiss
                 }.get()
+
+                Element linkHistorico = parser.encontrarLinkHistorico(documentTiss)
+
+                if (linkHistorico) {
+                    String urlHistorico = linkHistorico.absUrl('href')
+
+                    Document documentHistorico = HttpBuilder.configure {
+                        request.uri = urlHistorico
+                    }.get()
+
+                    println("Página do historico acessada")
+                    println documentHistorico.title()
+                } else {
+                    println "Link do histórico NÃO encontrado"
+                }
 
                 Element linkVersao = parser.encontrarLinkVersao(documentTiss)
 
