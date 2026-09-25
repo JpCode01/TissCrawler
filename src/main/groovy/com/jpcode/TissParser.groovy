@@ -38,4 +38,8 @@ class TissParser {
             link.text().contains("Clique aqui para acessar todas as versões dos Componentes")
         }
     }
+
+    List<Element> encontrarTabelas(Document document) {
+        return document.select('table').toList()
+    }
 }
