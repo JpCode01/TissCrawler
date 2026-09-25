@@ -87,4 +87,10 @@ class TissParser {
 
         return historicos
     }
+
+    Element encontrarLinkTabelaErros(Document document) {
+        return document.select('a').find { Element link ->
+            link.text().contains("Clique aqui para baixar a tabela de erros no envio para a ANS (.xlsx)")
+        }
+    }
 }
