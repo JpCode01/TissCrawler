@@ -3,6 +3,9 @@ package com.jpcode
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 class TissParser {
 
     private final TimeParser timeParser = new TimeParser()
@@ -20,9 +23,23 @@ class TissParser {
     }
 
     Element encontrarLinkVersao(Document document) {
-        return document.select('a').find { Element link ->
-            link.text().contains("Clique aqui para acessar a versão Julho/2026")
+        Pattern padrao =
+                Pattern.compile(
+                        /Clique aqui para acessar a versão ([A-Za-z]+\/\d{4})/
+                )
+
+        for (Element link : document.select('a')) {
+
+            String texto = link.text()
+
+            java.util.regex.Matcher matcher = padrao.matcher(texto)
+
+            if (matcher.find()) {
+                return link
+            }
         }
+
+        return null
     }
 
     Element encontrarLinkComunicacao(Document document) {
