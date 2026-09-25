@@ -10,7 +10,15 @@ class TissCrawler {
 
     void iniciar() {
 
-        println System.getProperty("user.dir")
+        File diretorio = new File(
+                "C:/Users/Mysterio/Desktop/Estudo/Estudo Java/TissCrawler/Downloads/Arquivos_padrao_TISS"
+        )
+
+        if (!diretorio.exists()) {
+            diretorio.mkdirs()
+        }
+
+
 
         Document document = HttpBuilder.configure {
             request.uri = "https://www.gov.br/ans/pt-br"
@@ -55,6 +63,51 @@ class TissCrawler {
                     println "Link do histórico NÃO encontrado"
                 }
 
+                String urlTabelasRelacionadas =
+                        "https://www.gov.br/ans/pt-br/assuntos/prestadores/padrao-para-troca-de-informacao-de-saude-suplementar-2013-tiss/padrao-tiss-tabelas-relacionadas"
+
+                Document documentTabelasRelacionadas = HttpBuilder.configure {
+                    request.uri = urlTabelasRelacionadas
+                }.get()
+
+                Element linkTabelaErros = parser.encontrarLinkTabelaErros(documentTabelasRelacionadas)
+
+                if (linkTabelaErros) {
+
+                    String urlTabelaErros =
+                            linkTabelaErros.absUrl('href')
+
+                    File arquivoErros = new File(
+                            diretorio,
+                            'Tabela_erros_envio_ANS.xlsx'
+                    )
+
+                    if (arquivoErros.exists()) {
+                        println("Tabela de erros já existe. Download não necessário.")
+                    } else {
+
+                        byte[] arquivo = HttpBuilder.configure {
+                            request.uri = urlTabelaErros
+                        }.get(byte[]) {
+                            response.parser(
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            ) {
+                                config, resposta ->
+                                    resposta.inputStream.bytes
+                            }
+                        }
+
+                        arquivoErros.bytes = arquivo
+
+                        println("Tabela de erros no envio para a ANS baixada!")
+                    }
+
+                } else {
+
+                    println "Link da tabela de erros NÃO encontrado"
+
+                }
+                
                 Element linkVersao = parser.encontrarLinkVersao(documentTiss)
 
                 String urlVersao = linkVersao.absUrl('href')
@@ -66,12 +119,6 @@ class TissCrawler {
                 Element linkComunicacao = parser.encontrarLinkComunicacao(documentVersao)
 
                 String urlComunicacao = linkComunicacao.absUrl('href')
-
-                File diretorio = new File(
-                        "C:/Users/Mysterio/Desktop/Estudo/Estudo Java/TissCrawler/Downloads/Arquivos_padrao_TISS"
-                )
-
-                diretorio.mkdirs()
 
                 File arquivoZip = new File(
                         diretorio,
