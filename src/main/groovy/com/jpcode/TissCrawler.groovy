@@ -45,8 +45,12 @@ class TissCrawler {
                         request.uri = urlHistorico
                     }.get()
 
-                    println("Página do historico acessada")
-                    println documentHistorico.title()
+                    List<HistoricoTiss> historicos = parser.extrairHistorico(documentHistorico)
+
+                    for (HistoricoTiss historico : historicos) {
+                        println "${historico.competencia} | ${historico.publicacao} | ${historico.inicioVigencia}"
+                    }
+                        
                 } else {
                     println "Link do histórico NÃO encontrado"
                 }
