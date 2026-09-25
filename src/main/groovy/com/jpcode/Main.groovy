@@ -4,6 +4,5 @@ static void main(String[] args) {
     println("TISS Crawler iniciado!")
 
     TissCrawler crawler = new TissCrawler()
-
-    crawler.baixarComponente()
+    crawler.iniciar()
 }
